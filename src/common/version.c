@@ -21,7 +21,7 @@
 
 #include <common.h>
 
-static const sppc_version_t g_version = { .major = SPPC_MAJOR, .minor = SPPC_MINOR, .patch = SPPC_PATCH };  /*!< Global version context */
+static const sppc_version_t g_version = { .major = SPPC_MAJOR, .minor = SPPC_MINOR, .patch = SPPC_PATCH };
 
 #ifdef __cplusplus
 extern "C" {
