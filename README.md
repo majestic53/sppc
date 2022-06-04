@@ -4,13 +4,15 @@
 
 ### A Sharp pocket-PC serial interface, written in C.
 
-`SPPC` sends files from a PC to a Sharp pocket-PC (PCG8XX or similar), over 11-pin serial:
+`SPPC` sends files from a PC to a Sharp pocket-PC (PCG8XX or similar), over USB to 11-pin serial:
 
 ```
  --------       --------       -----       ----
 | PCG8XX | <-- | Serial | <-- | USB | <-- | PC |
  --------       --------       -----       ----
 ```
+
+__NOTE__: A USB/Serial adapter is required for `SPPC` to work.
 
 ## Installation
 
