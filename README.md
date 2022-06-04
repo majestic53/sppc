@@ -37,8 +37,8 @@ Options:
 ### Example
 
 ```bash
-# Send a binary file at 9600 baud to /dev/ttyUSB0
-sppc --baud 9600 --device /dev/ttyUSB0 file.bin
+# Send a binary file to /dev/ttyUSB0 at 9600 baud
+sppc --device /dev/ttyUSB0 --baud 9600 file.bin
 ```
 
 ## License

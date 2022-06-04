@@ -34,7 +34,7 @@
 
 #define SPPC_MAJOR 0
 #define SPPC_MINOR 1
-#define SPPC_PATCH 0x2628c5c
+#define SPPC_PATCH 0x50b6487
 
 #define SPPC_EOF '\x1A'
 
