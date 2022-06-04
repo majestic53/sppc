@@ -26,7 +26,6 @@ OBJECT_FILES=$(patsubst %.c,%.o,$(shell find ./ -name '*.c'))
 
 INCLUDE_FLAGS=$(subst ../include/,-I../include/,$(shell find ../include/ -maxdepth 2 -type d))
 INSTALL_FLAGS=0755
-LIBRARY_FLAGS=
 PATCH_FLAGS="s/SPPC_PATCH .*/SPPC_PATCH 0x$(shell git rev-parse --short HEAD)/g"
 
 .PHONY: all
@@ -61,7 +60,7 @@ $(BUILD_DIRECTORY):
 	@mkdir -p $@
 
 $(BUILD_DIRECTORY)$(BINARY_FILE): $(BUILD_DIRECTORY) $(OBJECT_FILES)
-	cc $(FLAGS) $(OBJECT_FILES) $(LIBRARY_FLAGS) -o $@
+	cc $(FLAGS) $(OBJECT_FILES) -o $@
 
 %.o: %.c
 	cc $(FLAGS) $(INCLUDE_FLAGS) -c -o $@ $<
