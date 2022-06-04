@@ -22,13 +22,20 @@
 #ifndef SPPC_DEFINE_H_
 #define SPPC_DEFINE_H_
 
+#include <errno.h>
+#include <fcntl.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <termios.h>
+#include <unistd.h>
 #include <sppc.h>
 
 #define SPPC_MAJOR 0
 #define SPPC_MINOR 1
 #define SPPC_PATCH 0x2628c5c
+
+#define SPPC_EOF '\x1A'
 
 #endif /* SPPC_DEFINE_H_ */

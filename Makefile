@@ -19,18 +19,13 @@
 
 SOURCE_DIRECTORY=./src/
 
-BUILD_FLAGS=-march=native\ -mtune=native\ -std=c11\ -Wall\ -Werror
+BUILD_FLAGS=-march=native\ -mtune=native\ -std=gnu11\ -Wall\ -Werror
 DEBUG_BUILD_FLAGS=FLAGS=$(BUILD_FLAGS)\ -DDEBUG\ -g
 RELEASE_BUILD_FLAGS=FLAGS=$(BUILD_FLAGS)\ -O3
 MAKE_FLAGS=--no-print-directory -C
 
 .PHONY: all
 all: release
-
-.PHONY: analyze
-analyze:
-	@cloc .
-	@cppcheck --enable=all --std=c11 --suppress=missingIncludeSystem .
 
 .PHONY: clean
 clean:

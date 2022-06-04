@@ -22,13 +22,21 @@
 #ifndef SPPC_FILE_H_
 #define SPPC_FILE_H_
 
-#include <define.h>
+#include <buffer.h>
+
+typedef struct {
+    FILE *position;
+} sppc_file_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-/* TODO */
+void sppc_file_close(sppc_file_t *file);
+
+sppc_error_e sppc_file_open(sppc_file_t *file, const char *path, const char *mode);
+
+sppc_error_e sppc_file_read(sppc_buffer_t *buffer, const char *path);
 
 #ifdef __cplusplus
 }

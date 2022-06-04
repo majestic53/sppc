@@ -19,54 +19,26 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <common.h>
+#ifndef SPPC_BUFFER_H_
+#define SPPC_BUFFER_H_
+
+#include <define.h>
+
+typedef struct {
+    uint8_t *data;
+    size_t length;
+} sppc_buffer_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-static uint8_t sppc_callback(size_t length, size_t index, uint8_t data)
-{
+sppc_error_e sppc_buffer_allocate(sppc_buffer_t *buffer, size_t length);
 
-    if(index && !(index % (length / 10))) {
-        fprintf(stdout, "[%.02f %%] Sent %.02f KB (%zu bytes)\n", 100 * (index / (float)length), index / 1024.f, index);
-    }
-
-    return ~data;   /* Invert the data in-order to make it understandable by Sharp pocket-pc */
-}
-
-sppc_error_e sppc(const sppc_t *context)
-{
-    sppc_error_e result;
-    sppc_buffer_t buffer = {};
-    sppc_serial_t serial = {};
-
-    if((result = sppc_file_read(&buffer, context->file)) != SPPC_SUCCESS) {
-        goto exit;
-    }
-
-    if((result = sppc_serial_open(&serial, sppc_callback, context->device, context->baud)) != SPPC_SUCCESS) {
-        goto exit;
-    }
-
-    fprintf(stdout, "File   -- %s\n", context->file);
-    fprintf(stdout, "Device -- %s\n", context->device);
-    fprintf(stdout, "Baud   -- %u\n\n", context->baud);
-    fprintf(stdout, "Sending %.02f KB (%lu bytes)\n", buffer.length / 1024.f, buffer.length);
-
-    if((result = sppc_serial_write(&serial, &buffer)) != SPPC_SUCCESS) {
-        goto exit;
-    }
-
-    fprintf(stdout, "Done.\n");
-
-exit:
-    sppc_serial_close(&serial);
-    sppc_buffer_free(&buffer);
-
-    return result;
-}
+void sppc_buffer_free(sppc_buffer_t *buffer);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+#endif /* SPPC_BUFFER_H_ */
