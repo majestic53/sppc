@@ -26,7 +26,7 @@ Options:
    -v, --version      Show version information
 ```
 
-### Examples
+### Example
 
 ```bash
 # Send a binary file at 9600 baud to /dev/ttyUSB0

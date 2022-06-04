@@ -29,6 +29,6 @@
 
 #define SPPC_MAJOR 0
 #define SPPC_MINOR 1
-#define SPPC_PATCH 1
+#define SPPC_PATCH 0x2628c5c
 
 #endif /* SPPC_DEFINE_H_ */
