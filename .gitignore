@@ -1,0 +1,6 @@
+**/.DS_Store
+*.code-workspace
+*.sublime-workspace
+*.sublime-project
+*.o
+build/

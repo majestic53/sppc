@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  Debug:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Dependency Information
+        run: |
+          echo "gcc `gcc --version | grep gcc | awk '{print $3}'`"
+      - name: Run Debug Build
+        run: |
+          make debug
+  Release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Dependency Information
+        run: |
+          echo "gcc `gcc --version | grep gcc | awk '{print $3}'`"
+      - name: Run Release Build
+        run: |
+          make
