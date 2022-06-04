@@ -7,7 +7,7 @@
 `SPPC` sends files from a PC to a Sharp pocket-PC (PCG8XX or similar), over 11-pin serial:
 
 ```
- --------       ________       -----       ----
+ --------       --------       -----       ----
 | PCG8XX | <-- | Serial | <-- | USB | <-- | PC |
  --------       --------       -----       ----
 ```
