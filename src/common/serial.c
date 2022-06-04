@@ -65,7 +65,7 @@ void sppc_serial_close(sppc_serial_t *serial)
     memset(serial, 0, sizeof(*serial));
 }
 
-sppc_error_e sppc_serial_open(sppc_serial_t *serial, write_cb callback, const char *device, uint32_t baud)
+sppc_error_e sppc_serial_open(sppc_serial_t *serial, sppc_write_cb callback, const char *device, uint32_t baud)
 {
     speed_t speed;
     sppc_error_e result;

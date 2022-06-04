@@ -24,10 +24,10 @@
 
 #include <define.h>
 
-typedef uint8_t (*write_cb)(size_t, size_t, uint8_t);
+typedef uint8_t (*sppc_write_cb)(size_t, size_t, uint8_t);
 
 typedef struct {
-    write_cb callback;
+    sppc_write_cb callback;
     int port;
 } sppc_serial_t;
 
@@ -37,7 +37,7 @@ extern "C" {
 
 void sppc_serial_close(sppc_serial_t *serial);
 
-sppc_error_e sppc_serial_open(sppc_serial_t *serial, write_cb callback, const char *device, uint32_t baud);
+sppc_error_e sppc_serial_open(sppc_serial_t *serial, sppc_write_cb callback, const char *device, uint32_t baud);
 
 sppc_error_e sppc_serial_write(sppc_serial_t *serial, sppc_buffer_t *buffer);
 
