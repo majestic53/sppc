@@ -1,8 +1,8 @@
-# SPPC (DMG-Lite)
+# SPPC
 
 [![License: MIT](https://shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/majestic53/sppc/blob/master/LICENSE.md) [![Build Status](https://github.com/majestic53/sppc/workflows/Build/badge.svg)](https://github.com/majestic53/sppc/actions/workflows/build.yml)
 
-### A Sharp pocket-pc serial interface, written in C.
+### A Sharp pocket-PC serial interface, written in C.
 
 `SPPC` sends files from a PC to a Sharp pocket-PC (PCG8XX or similar), over 11-pin serial.
 
