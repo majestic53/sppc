@@ -32,7 +32,7 @@ static uint8_t sppc_callback(size_t length, size_t index, uint8_t data)
         fprintf(stdout, "[%.02f %%] Sent %.02f KB (%zu bytes)\n", 100 * (index / (float)length), index / 1024.f, index);
     }
 
-    return ~data;   /* Invert the data in-order to make it understandable by Sharp pocket-pc */
+    return data;
 }
 
 sppc_error_e sppc(const sppc_t *context)
