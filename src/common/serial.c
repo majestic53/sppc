@@ -35,7 +35,8 @@ static sppc_error_e sppc_serial_baud_map(uint32_t baud, speed_t *speed)
     size_t index;
     sppc_error_e result = SPPC_SUCCESS;
     const sppc_baud_map_t map[] = {
-        { 9600, B9600 },    /* 9600 baud */
+        { 9600, B9600 },        /* 9600 baud */
+        { 115200, B115200 },    /* 115200 baud */
         };
 
     for(index = 0; index < sizeof(map) / sizeof(*map); ++index) {
@@ -67,8 +68,8 @@ void sppc_serial_close(sppc_serial_t *serial)
 
 sppc_error_e sppc_serial_open(sppc_serial_t *serial, sppc_write_cb callback, const char *device, uint32_t baud)
 {
-    speed_t speed;
     sppc_error_e result;
+    speed_t speed = B9600;
     struct termios terminal = {};
 
     if((result = sppc_serial_baud_map(baud, &speed)) != SPPC_SUCCESS) {
@@ -85,16 +86,19 @@ sppc_error_e sppc_serial_open(sppc_serial_t *serial, sppc_write_cb callback, con
         goto exit;
     }
 
+    if(cfgetospeed(&terminal) != speed) {
+
+        if(cfsetospeed(&terminal, speed)) {
+            result = SPPC_ERROR("Failed to set terminal speed -- %s", device);
+            goto exit;
+        }
+    }
+
     terminal.c_oflag |= (ONLCR | CS8);                          /* Map NL to CR-NL, 8-bit character size */
     terminal.c_cflag &= ~(CSIZE | CSTOPB | CRTSCTS | PARENB);   /* Single stop bit, No flow control, No parity bit */
 
     if(tcsetattr(serial->port, TCSANOW, &terminal)) {
         result = SPPC_ERROR("Failed to set terminal parameters -- %s", device);
-        goto exit;
-    }
-
-    if(cfsetospeed(&terminal, speed)) {
-        result = SPPC_ERROR("Failed to set terminal speed -- %s", device);
         goto exit;
     }
 
