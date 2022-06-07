@@ -115,6 +115,7 @@ exit:
 
 sppc_error_e sppc_serial_write(sppc_serial_t *serial, sppc_buffer_t *buffer)
 {
+    uint8_t terminator = SPPC_EOF;
     sppc_error_e result = SPPC_SUCCESS;
 
     for(size_t index = 0; index < buffer->length; ++index) {
@@ -128,6 +129,11 @@ sppc_error_e sppc_serial_write(sppc_serial_t *serial, sppc_buffer_t *buffer)
             result = SPPC_ERROR("Failed to write to port -- %i", serial->port);
             goto exit;
         }
+    }
+
+    if(write(serial->port, &terminator, 1) != 1) {
+        result = SPPC_ERROR("Failed to write to port -- %i", serial->port);
+        goto exit;
     }
 
 exit:
