@@ -25,17 +25,50 @@
 extern "C" {
 #endif /* __cplusplus */
 
-static uint8_t sppc_callback(size_t length, size_t index, uint8_t data)
+static uint8_t sppc_read_callback(size_t length, size_t index, uint8_t data)
 {
 
     if(index && !(index % (length / 10))) {
-        fprintf(stdout, "[%.02f %%] Sent %.02f KB (%zu bytes)\n", 100 * (index / (float)length), index / 1024.f, index);
+        fprintf(stdout, "[%.02f %%] Read %.02f KB (%zu bytes)\n", 100.f * (index / (float)length), index / 1024.f, index);
     }
 
     return data;
 }
 
-sppc_error_e sppc(const sppc_t *context)
+static sppc_error_e sppc_read(const sppc_t *context)
+{
+    sppc_error_e result;
+    sppc_buffer_t buffer = {};
+    sppc_serial_t serial = {};
+
+    if((result = sppc_serial_open(&serial, sppc_read_callback, context->device, context->baud)) != SPPC_SUCCESS) {
+        goto exit;
+    }
+
+    /* TODO: SERIAL READ */
+
+    fprintf(stdout, "Read %.02f KB (%lu bytes)\n", buffer.length / 1024.f, buffer.length);
+
+    /* TODO: WRITE BUFFER TO FILE */
+
+exit:
+    sppc_serial_close(&serial);
+    sppc_buffer_free(&buffer);
+
+    return result;
+}
+
+static uint8_t sppc_write_callback(size_t length, size_t index, uint8_t data)
+{
+
+    if(index && !(index % (length / 10))) {
+        fprintf(stdout, "[%.02f %%] Wrote %.02f KB (%zu bytes)\n", 100.f * (index / (float)length), index / 1024.f, index);
+    }
+
+    return data;
+}
+
+static sppc_error_e sppc_write(const sppc_t *context)
 {
     sppc_error_e result;
     sppc_buffer_t buffer = {};
@@ -45,25 +78,43 @@ sppc_error_e sppc(const sppc_t *context)
         goto exit;
     }
 
-    if((result = sppc_serial_open(&serial, sppc_callback, context->device, context->baud)) != SPPC_SUCCESS) {
+    if((result = sppc_serial_open(&serial, sppc_write_callback, context->device, context->baud)) != SPPC_SUCCESS) {
         goto exit;
     }
+
+    fprintf(stdout, "Writing %.02f KB (%lu bytes)\n", buffer.length / 1024.f, buffer.length);
+
+    if((result = sppc_serial_write(&serial, &buffer)) != SPPC_SUCCESS) {
+        goto exit;
+    }
+
+exit:
+    sppc_serial_close(&serial);
+    sppc_buffer_free(&buffer);
+
+    return result;
+}
+
+sppc_error_e sppc(const sppc_t *context)
+{
+    sppc_error_e result = SPPC_SUCCESS;
 
     fprintf(stdout, "File   -- %s\n", context->file);
     fprintf(stdout, "Device -- %s\n", context->device);
     fprintf(stdout, "Baud   -- %u\n\n", context->baud);
-    fprintf(stdout, "Sending %.02f KB (%lu bytes)\n", buffer.length / 1024.f, buffer.length);
 
-    if((result = sppc_serial_write(&serial, &buffer)) != SPPC_SUCCESS) {
+    if(context->read) {
+
+        if((result = sppc_read(context)) != SPPC_SUCCESS) {
+            goto exit;
+        }
+    } else if((result = sppc_write(context)) != SPPC_SUCCESS) {
         goto exit;
     }
 
     fprintf(stdout, "Done.\n");
 
 exit:
-    sppc_serial_close(&serial);
-    sppc_buffer_free(&buffer);
-
     return result;
 }
 

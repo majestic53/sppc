@@ -20,7 +20,6 @@
  */
 
 #include <getopt.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,6 +29,7 @@ static const struct option OPTION[] = {
     { "baud", required_argument, NULL, 'b' },
     { "device", required_argument, NULL, 'd' },
     { "help", no_argument, NULL, 'h' },
+    { "read", no_argument, NULL, 'r' },
     { "version", no_argument, NULL, 'v' },
     { NULL, 0, NULL, 0 },
     };
@@ -48,7 +48,7 @@ static void show_help(const char *base)
     while(OPTION[flag].name) {
         char message[22] = {};
         const char *description[] = {
-            "Specify baud rate", "Specify device", "Show help information", "Show version information",
+            "Specify baud rate", "Specify device", "Show help information", "Specify read mode", "Show version information",
             };
 
         snprintf(message, sizeof(message), "   -%c, --%s", OPTION[flag].val, OPTION[flag].name);
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 
     opterr = 1;
 
-    while((option = getopt_long(argc, argv, "b:d:hv", OPTION, &option_index)) != -1) {
+    while((option = getopt_long(argc, argv, "b:d:hrv", OPTION, &option_index)) != -1) {
 
         switch(option) {
             case 'b':
@@ -104,6 +104,9 @@ int main(int argc, char *argv[])
             case 'h':
                 show_help(argv[0]);
                 goto exit;
+            case 'r':
+                context.read = true;
+                break;
             case 'v':
                 show_version();
                 goto exit;

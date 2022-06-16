@@ -39,7 +39,7 @@ void sppc_serial_close(sppc_serial_t *serial);
 
 sppc_error_e sppc_serial_open(sppc_serial_t *serial, sppc_write_cb callback, const char *device, uint32_t baud);
 
-sppc_error_e sppc_serial_write(sppc_serial_t *serial, sppc_buffer_t *buffer);
+sppc_error_e sppc_serial_write(sppc_serial_t *serial, const sppc_buffer_t *buffer);
 
 #ifdef __cplusplus
 }

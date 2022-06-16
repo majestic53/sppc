@@ -22,6 +22,7 @@
 #ifndef SPPC_H_
 #define SPPC_H_
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -37,6 +38,7 @@ typedef struct {
     const char *device;
     const char *file;
     uint32_t baud;
+    bool read;
 } sppc_t;
 
 typedef struct {

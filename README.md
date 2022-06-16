@@ -4,12 +4,12 @@
 
 ### A Sharp pocket-PC serial interface, written in C.
 
-`SPPC` sends files from a PC to a Sharp pocket-PC (PCG8XX or similar), over USB to 11-pin serial:
+`SPPC` reads and writes files between a PC and a Sharp pocket-PC (PCG8XX or similar), over USB to 11-pin serial:
 
 ```
- --------       --------       -----       ----
-| PCG8XX | <-- | Serial | <-- | USB | <-- | PC |
- --------       --------       -----       ----
+ --------        --------        -----        ----
+| PCG8XX | <--> | Serial | <--> | USB | <--> | PC |
+ --------        --------        -----        ----
 ```
 
 __NOTE__: A USB/Serial adapter is required for `SPPC` to work.
@@ -31,14 +31,18 @@ Options:
    -b, --baud         Specify baud rate
    -d, --device       Specify device
    -h, --help         Show help information
+   -r, --read         Specify read mode
    -v, --version      Show version information
 ```
 
 ### Example
 
 ```bash
-# Send a binary file to /dev/ttyUSB0 at 9600 baud
+# Write a file to /dev/ttyUSB0 at 9600 baud
 sppc --device /dev/ttyUSB0 --baud 9600 file.bin
+
+# Read a file from /dev/ttyUSB0 at 9600 baud
+sppc --device /dev/ttyUSB0 --baud 9600 --read file.bin
 ```
 
 ## License
