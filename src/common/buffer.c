@@ -46,6 +46,21 @@ void sppc_buffer_free(sppc_buffer_t *buffer)
     memset(buffer, 0, sizeof(*buffer));
 }
 
+sppc_error_e sppc_buffer_reallocate(sppc_buffer_t *buffer, size_t length)
+{
+    sppc_error_e result = SPPC_SUCCESS;
+
+    if(!(buffer->data = realloc(buffer->data, length))) {
+        result = SPPC_ERROR("Failed to allocate buffer -- %.02f KB (%u bytes)", length / 1024.f, length);
+        goto exit;
+    }
+
+    buffer->length = length;
+
+exit:
+    return result;
+}
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

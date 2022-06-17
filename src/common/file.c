@@ -67,16 +67,14 @@ sppc_error_e sppc_file_read(sppc_buffer_t *buffer, const char *path)
         goto exit;
     }
 
-    if((result = sppc_buffer_allocate(buffer, length + 1)) != SPPC_SUCCESS) {
+    if((result = sppc_buffer_allocate(buffer, length)) != SPPC_SUCCESS) {
         goto exit;
     }
 
-    if(fread(buffer->data, sizeof(*buffer->data), buffer->length - 1, file.position) != buffer->length - 1) {
+    if(fread(buffer->data, sizeof(*buffer->data), buffer->length, file.position) != buffer->length) {
         result = SPPC_ERROR("Failed to read file -- %s", path);
         goto exit;
     }
-
-    buffer->data[length] = SPPC_EOF;    /* Append EOF */
 
 exit:
 
@@ -84,6 +82,29 @@ exit:
         sppc_buffer_free(buffer);
     }
 
+    sppc_file_close(&file);
+
+    return result;
+}
+
+sppc_error_e sppc_file_write(const sppc_buffer_t *buffer, const char *path)
+{
+    sppc_error_e result;
+    sppc_file_t file = {};
+
+    if((result = sppc_file_open(&file, path, "wb")) != SPPC_SUCCESS) {
+        goto exit;
+    }
+
+    if(buffer->length) {
+
+        if(fwrite(buffer->data, sizeof(*buffer->data), buffer->length - 1, file.position) != buffer->length - 1) {
+            result = SPPC_ERROR("Failed to write file -- %s", path);
+            goto exit;
+        }
+    }
+
+exit:
     sppc_file_close(&file);
 
     return result;

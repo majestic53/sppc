@@ -37,6 +37,8 @@ sppc_error_e sppc_buffer_allocate(sppc_buffer_t *buffer, size_t length);
 
 void sppc_buffer_free(sppc_buffer_t *buffer);
 
+sppc_error_e sppc_buffer_reallocate(sppc_buffer_t *buffer, size_t length);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

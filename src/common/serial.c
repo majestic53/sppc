@@ -35,8 +35,8 @@ static sppc_error_e sppc_serial_baud_map(uint32_t baud, speed_t *speed)
     size_t index;
     sppc_error_e result = SPPC_SUCCESS;
     const sppc_baud_map_t map[] = {
-        { 9600, B9600 },        /* 9600 baud */
-        { 115200, B115200 },    /* 115200 baud */
+        { 9600, B9600 },
+        { 115200, B115200 },
         };
 
     for(index = 0; index < sizeof(map) / sizeof(*map); ++index) {
@@ -66,7 +66,7 @@ void sppc_serial_close(sppc_serial_t *serial)
     memset(serial, 0, sizeof(*serial));
 }
 
-sppc_error_e sppc_serial_open(sppc_serial_t *serial, sppc_write_cb callback, const char *device, uint32_t baud)
+sppc_error_e sppc_serial_open(sppc_serial_t *serial, const char *device, uint32_t baud)
 {
     sppc_error_e result;
     speed_t speed = B9600;
@@ -76,8 +76,13 @@ sppc_error_e sppc_serial_open(sppc_serial_t *serial, sppc_write_cb callback, con
         goto exit;
     }
 
-    if((serial->port = open(device, O_WRONLY | O_NOCTTY)) < 0) {
+    if((serial->port = open(device, O_WRONLY | O_NOCTTY | O_NDELAY)) < 0) {
         result = SPPC_ERROR("Failed to open device -- %s", device);
+        goto exit;
+    }
+
+    if(fcntl(serial->port, F_SETFL, 0) == -1) {
+        result = SPPC_ERROR("Failed to setup device -- %s", device);
         goto exit;
     }
 
@@ -94,8 +99,8 @@ sppc_error_e sppc_serial_open(sppc_serial_t *serial, sppc_write_cb callback, con
         }
     }
 
-    terminal.c_oflag |= (ONLCR | CS8);                          /* Map NL to CR-NL, 8-bit character size */
-    terminal.c_cflag &= ~(CSIZE | CSTOPB | CRTSCTS | PARENB);   /* Single stop bit, No flow control, No parity bit */
+    terminal.c_oflag |= (ONLCR | CREAD | CS8);
+    terminal.c_cflag &= ~(CSIZE | CSTOPB | CRTSCTS | PARENB);
 
     if(tcsetattr(serial->port, TCSANOW, &terminal)) {
         result = SPPC_ERROR("Failed to set terminal parameters -- %s", device);
@@ -107,7 +112,32 @@ sppc_error_e sppc_serial_open(sppc_serial_t *serial, sppc_write_cb callback, con
         goto exit;
     }
 
-    serial->callback = callback;
+exit:
+    return result;
+}
+
+sppc_error_e sppc_serial_read(sppc_serial_t *serial, sppc_buffer_t *buffer)
+{
+    fd_set input;
+    sppc_error_e result = SPPC_SUCCESS;
+
+    FD_ZERO(&input);
+    FD_SET(serial->port, &input);
+
+    for(;;) {
+
+        if(select(serial->port + 1, &input, NULL, NULL, NULL) < 0) {
+            result = SPPC_ERROR("Select failed -- %u", errno);
+            goto exit;
+        }
+
+        if(FD_ISSET(serial->port, &input)) {
+
+            /* TODO: READ DATA FROM PORT */
+            break;
+            /* ---- */
+        }
+    }
 
 exit:
     return result;
@@ -118,17 +148,9 @@ sppc_error_e sppc_serial_write(sppc_serial_t *serial, const sppc_buffer_t *buffe
     uint8_t terminator = SPPC_EOF;
     sppc_error_e result = SPPC_SUCCESS;
 
-    for(size_t index = 0; index < buffer->length; ++index) {
-        uint8_t data = buffer->data[index];
-
-        if(serial->callback) {
-            data = serial->callback(buffer->length, index, data);
-        }
-
-        if(write(serial->port, &data, 1) != 1) {
-            result = SPPC_ERROR("Failed to write to port -- %i", serial->port);
-            goto exit;
-        }
+    if(write(serial->port, buffer->data, buffer->length) != buffer->length) {
+        result = SPPC_ERROR("Failed to write to port -- %i", serial->port);
+        goto exit;
     }
 
     if(write(serial->port, &terminator, 1) != 1) {

@@ -38,6 +38,8 @@ sppc_error_e sppc_file_open(sppc_file_t *file, const char *path, const char *mod
 
 sppc_error_e sppc_file_read(sppc_buffer_t *buffer, const char *path);
 
+sppc_error_e sppc_file_write(const sppc_buffer_t *buffer, const char *path);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
