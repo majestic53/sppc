@@ -12,7 +12,9 @@
  --------        --------        -----        ----
 ```
 
-__NOTE__: A USB/Serial adapter is required for `SPPC` to work.
+__NOTE__: A USB/Serial adapter, with inverted Rx/Tx signals, is required for `SPPC` to work:
+
+<img src="https://github.com/majestic53/sppc/blob/master/docs/adapter.jpg" alt="Adapter" /><img src="https://github.com/majestic53/sppc/blob/master/docs/circuit.jpg" alt="Adapter circuit" />
 
 ## Installation
 
