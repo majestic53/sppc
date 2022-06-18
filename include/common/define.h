@@ -35,9 +35,8 @@
 
 #define SPPC_MAJOR 0
 #define SPPC_MINOR 1
-#define SPPC_PATCH 0x978aac6
+#define SPPC_PATCH 0x8d10eaf
 
-#define SPPC_READ_EOF '\x0A'
-#define SPPC_WRITE_EOF '\x1A'
+#define SPPC_EOF '\x1A'
 
 #endif /* SPPC_DEFINE_H_ */

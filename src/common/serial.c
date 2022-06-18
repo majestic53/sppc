@@ -182,7 +182,7 @@ exit:
 
 sppc_error_e sppc_serial_write(sppc_serial_t *serial, const sppc_buffer_t *buffer)
 {
-    uint8_t terminator = SPPC_WRITE_EOF;
+    uint8_t terminator = SPPC_EOF;
     sppc_error_e result = SPPC_SUCCESS;
 
     if(write(serial->port, buffer->data, buffer->length) != buffer->length) {
