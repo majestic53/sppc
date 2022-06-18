@@ -22,6 +22,7 @@
 #ifndef SPPC_DEFINE_H_
 #define SPPC_DEFINE_H_
 
+#include <sys/ioctl.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <stdarg.h>

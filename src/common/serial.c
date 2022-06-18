@@ -76,12 +76,12 @@ sppc_error_e sppc_serial_open(sppc_serial_t *serial, const char *device, uint32_
         goto exit;
     }
 
-    if((serial->port = open(device, O_WRONLY | O_NOCTTY | O_NDELAY)) < 0) {
+    if((serial->port = open(device, O_WRONLY | O_NOCTTY)) < 0) {
         result = SPPC_ERROR("Failed to open device -- %s", device);
         goto exit;
     }
 
-    if(fcntl(serial->port, F_SETFL, 0) == -1) {
+    if(fcntl(serial->port, F_SETFL, O_SYNC) == -1) {
         result = SPPC_ERROR("Failed to setup device -- %s", device);
         goto exit;
     }
@@ -91,10 +91,18 @@ sppc_error_e sppc_serial_open(sppc_serial_t *serial, const char *device, uint32_
         goto exit;
     }
 
+    if(cfgetispeed(&terminal) != speed) {
+
+        if(cfsetispeed(&terminal, speed)) {
+            result = SPPC_ERROR("Failed to set terminal input speed -- %s", device);
+            goto exit;
+        }
+    }
+
     if(cfgetospeed(&terminal) != speed) {
 
         if(cfsetospeed(&terminal, speed)) {
-            result = SPPC_ERROR("Failed to set terminal speed -- %s", device);
+            result = SPPC_ERROR("Failed to set terminal output speed -- %s", device);
             goto exit;
         }
     }
@@ -132,10 +140,18 @@ sppc_error_e sppc_serial_read(sppc_serial_t *serial, sppc_buffer_t *buffer)
         }
 
         if(FD_ISSET(serial->port, &input)) {
+            int length = 0;
 
-            /* TODO: READ DATA FROM PORT */
-            break;
-            /* ---- */
+            if(ioctl(serial->port, FIONREAD, &length) == -1) {
+                result = SPPC_ERROR("Ioctl failed -- %u", errno);
+                goto exit;
+            }
+
+            if(length > 0) {
+
+                /* TODO */
+
+            }
         }
     }
 

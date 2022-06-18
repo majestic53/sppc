@@ -4,15 +4,9 @@
 
 ### A Sharp pocket-PC serial interface, written in C.
 
-`SPPC` reads and writes files between a PC and a Sharp pocket-PC (PCG8XX or similar), over USB to 11-pin serial:
+`SPPC` allows for reading and writing files between a PC and a Sharp pocket-PC (PCG8XX or similar), over USB to 11-pin serial.
 
-```
- --------        --------        -----        ----
-| PCG8XX | <--> | Serial | <--> | USB | <--> | PC |
- --------        --------        -----        ----
-```
-
-__NOTE__: A USB/Serial adapter, with inverted Rx/Tx signals, is required for `SPPC` to work:
+__NOTE__: A USB/Serial adapter, with inverted Rx/Tx signals, is required for `SPPC` to work. For example, an FTDI adapter can be used for this purpose:
 
 <img src="https://github.com/majestic53/sppc/blob/master/docs/adapter.jpg" alt="Adapter" /><img src="https://github.com/majestic53/sppc/blob/master/docs/circuit.jpg" alt="Adapter circuit" />
 
