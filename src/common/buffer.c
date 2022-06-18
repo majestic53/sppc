@@ -25,16 +25,17 @@
 extern "C" {
 #endif /* __cplusplus */
 
-sppc_error_e sppc_buffer_allocate(sppc_buffer_t *buffer, size_t length)
+sppc_error_e sppc_buffer_allocate(sppc_buffer_t *buffer, size_t capacity)
 {
     sppc_error_e result = SPPC_SUCCESS;
 
-    if(!(buffer->data = calloc(length, sizeof(uint8_t)))) {
-        result = SPPC_ERROR("Failed to allocate buffer -- %.02f KB (%u bytes)", length / 1024.f, length);
+    if(!(buffer->data = calloc(capacity, sizeof(uint8_t)))) {
+        result = SPPC_ERROR("Failed to allocate buffer -- %.02f KB (%u bytes)", capacity / 1024.f, capacity);
         goto exit;
     }
 
-    buffer->length = length;
+    buffer->capacity = capacity;
+    buffer->length = 0;
 
 exit:
     return result;
@@ -46,16 +47,16 @@ void sppc_buffer_free(sppc_buffer_t *buffer)
     memset(buffer, 0, sizeof(*buffer));
 }
 
-sppc_error_e sppc_buffer_reallocate(sppc_buffer_t *buffer, size_t length)
+sppc_error_e sppc_buffer_reallocate(sppc_buffer_t *buffer, size_t capacity)
 {
     sppc_error_e result = SPPC_SUCCESS;
 
-    if(!(buffer->data = realloc(buffer->data, length))) {
-        result = SPPC_ERROR("Failed to allocate buffer -- %.02f KB (%u bytes)", length / 1024.f, length);
+    if(!(buffer->data = realloc(buffer->data, capacity))) {
+        result = SPPC_ERROR("Failed to allocate buffer -- %.02f KB (%u bytes)", capacity / 1024.f, capacity);
         goto exit;
     }
 
-    buffer->length = length;
+    buffer->capacity = capacity;
 
 exit:
     return result;

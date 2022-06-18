@@ -26,6 +26,7 @@
 
 typedef struct {
     uint8_t *data;
+    size_t capacity;
     size_t length;
 } sppc_buffer_t;
 

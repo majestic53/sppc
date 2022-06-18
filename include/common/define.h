@@ -22,7 +22,6 @@
 #ifndef SPPC_DEFINE_H_
 #define SPPC_DEFINE_H_
 
-#include <sys/ioctl.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <stdarg.h>
@@ -31,12 +30,14 @@
 #include <string.h>
 #include <termios.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 #include <sppc.h>
 
 #define SPPC_MAJOR 0
 #define SPPC_MINOR 1
-#define SPPC_PATCH 0x50b6487
+#define SPPC_PATCH 0x978aac6
 
-#define SPPC_EOF '\x1A'
+#define SPPC_READ_EOF '\x0A'
+#define SPPC_WRITE_EOF '\x1A'
 
 #endif /* SPPC_DEFINE_H_ */

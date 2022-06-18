@@ -71,6 +71,8 @@ sppc_error_e sppc_file_read(sppc_buffer_t *buffer, const char *path)
         goto exit;
     }
 
+    buffer->length = length;
+
     if(fread(buffer->data, sizeof(*buffer->data), buffer->length, file.position) != buffer->length) {
         result = SPPC_ERROR("Failed to read file -- %s", path);
         goto exit;
@@ -98,7 +100,7 @@ sppc_error_e sppc_file_write(const sppc_buffer_t *buffer, const char *path)
 
     if(buffer->length) {
 
-        if(fwrite(buffer->data, sizeof(*buffer->data), buffer->length - 1, file.position) != buffer->length - 1) {
+        if(fwrite(buffer->data, sizeof(*buffer->data), buffer->length, file.position) != buffer->length) {
             result = SPPC_ERROR("Failed to write file -- %s", path);
             goto exit;
         }

@@ -36,7 +36,6 @@ static sppc_error_e sppc_serial_baud_map(uint32_t baud, speed_t *speed)
     sppc_error_e result = SPPC_SUCCESS;
     const sppc_baud_map_t map[] = {
         { 9600, B9600 },
-        { 115200, B115200 },
         };
 
     for(index = 0; index < sizeof(map) / sizeof(*map); ++index) {
@@ -76,12 +75,12 @@ sppc_error_e sppc_serial_open(sppc_serial_t *serial, const char *device, uint32_
         goto exit;
     }
 
-    if((serial->port = open(device, O_WRONLY | O_NOCTTY)) < 0) {
+    if((serial->port = open(device, O_RDWR | O_NOCTTY | O_NDELAY)) < 0) {
         result = SPPC_ERROR("Failed to open device -- %s", device);
         goto exit;
     }
 
-    if(fcntl(serial->port, F_SETFL, O_SYNC) == -1) {
+    if(fcntl(serial->port, F_SETFL, 0) == -1) {
         result = SPPC_ERROR("Failed to setup device -- %s", device);
         goto exit;
     }
@@ -107,7 +106,9 @@ sppc_error_e sppc_serial_open(sppc_serial_t *serial, const char *device, uint32_
         }
     }
 
-    terminal.c_oflag |= (ONLCR | CREAD | CS8);
+    terminal.c_iflag |= INLCR;
+    terminal.c_oflag |= ONLCR;
+    terminal.c_cflag |= CS8 | CLOCAL | CREAD;
     terminal.c_cflag &= ~(CSIZE | CSTOPB | CRTSCTS | PARENB);
 
     if(tcsetattr(serial->port, TCSANOW, &terminal)) {
@@ -128,30 +129,50 @@ sppc_error_e sppc_serial_read(sppc_serial_t *serial, sppc_buffer_t *buffer)
 {
     fd_set input;
     sppc_error_e result = SPPC_SUCCESS;
+    struct timeval final = { .tv_sec = 1 }, *timeout = NULL;
+
+    if((result = sppc_buffer_allocate(buffer, 512)) != SPPC_SUCCESS) {
+        goto exit;
+    }
 
     FD_ZERO(&input);
     FD_SET(serial->port, &input);
 
     for(;;) {
+        int length = 0;
 
-        if(select(serial->port + 1, &input, NULL, NULL, NULL) < 0) {
-            result = SPPC_ERROR("Select failed -- %u", errno);
+        switch(select(serial->port + 1, &input, NULL, NULL, timeout)) {
+            case -1:
+                result = SPPC_ERROR("Select failed -- %u", errno);
+                goto exit;
+            case 0:
+                goto exit;
+            default:
+                break;
+        }
+
+        timeout = &final;
+
+        if(ioctl(serial->port, FIONREAD, &length) == -1) {
+            result = SPPC_ERROR("Ioctl failed -- %u", errno);
             goto exit;
         }
 
-        if(FD_ISSET(serial->port, &input)) {
-            int length = 0;
+        if(length > 0) {
 
-            if(ioctl(serial->port, FIONREAD, &length) == -1) {
-                result = SPPC_ERROR("Ioctl failed -- %u", errno);
+            if(buffer->capacity <= buffer->length + length) {
+
+                if((result = sppc_buffer_reallocate(buffer, buffer->capacity * 2)) != SPPC_SUCCESS) {
+                    goto exit;
+                }
+            }
+
+            if((length = read(serial->port, &buffer->data[buffer->length], buffer->capacity - buffer->length)) == -1) {
+                result = SPPC_ERROR("Read failed -- %u", errno);
                 goto exit;
             }
 
-            if(length > 0) {
-
-                /* TODO */
-
-            }
+            buffer->length += length;
         }
     }
 
@@ -161,7 +182,7 @@ exit:
 
 sppc_error_e sppc_serial_write(sppc_serial_t *serial, const sppc_buffer_t *buffer)
 {
-    uint8_t terminator = SPPC_EOF;
+    uint8_t terminator = SPPC_WRITE_EOF;
     sppc_error_e result = SPPC_SUCCESS;
 
     if(write(serial->port, buffer->data, buffer->length) != buffer->length) {
