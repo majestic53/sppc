@@ -19,6 +19,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*!
+ * @file main.c
+ * @brief Application.
+ */
+
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,6 +43,10 @@ static const struct option OPTION[] = {
 extern "C" {
 #endif /* __cplusplus */
 
+/*!
+ * @brief Show help information.
+ * @param[in] base Constant pointer to base path
+ */
 static void show_help(const char *base)
 {
     size_t flag = 0;
@@ -62,6 +71,9 @@ static void show_help(const char *base)
     }
 }
 
+/*!
+ * @brief Show version information.
+ */
 static void show_version(void)
 {
     const sppc_version_t *version = sppc_version();

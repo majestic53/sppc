@@ -19,25 +19,57 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*!
+ * @file file.h
+ * @brief Common file.
+ */
+
 #ifndef SPPC_FILE_H_
 #define SPPC_FILE_H_
 
 #include <buffer.h>
 
+/*!
+ * @struct sppc_file_t
+ * @brief File context
+ */
 typedef struct {
-    FILE *position;
+    FILE *position; /*!< File byte position */
 } sppc_file_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+/*!
+ * @brief Close file.
+ * @param[in,out] file Pointer to file context
+ */
 void sppc_file_close(sppc_file_t *file);
 
+/*!
+ * @brief Open file.
+ * @param[in,out] file Pointer to file context
+ * @param[in] path Constant pointer to file path
+ * @param[in] mode Constant pointer to file mode
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 sppc_error_e sppc_file_open(sppc_file_t *file, const char *path, const char *mode);
 
+/*!
+ * @brief Read buffer from file.
+ * @param[in,out] buffer Pointer to buffer context
+ * @param[in] path Constant pointer to file path
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 sppc_error_e sppc_file_read(sppc_buffer_t *buffer, const char *path);
 
+/*!
+ * @brief Write buffer to file.
+ * @param[in] buffer Constant pointer to buffer context
+ * @param[in] path Constant pointer to file path
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 sppc_error_e sppc_file_write(const sppc_buffer_t *buffer, const char *path);
 
 #ifdef __cplusplus

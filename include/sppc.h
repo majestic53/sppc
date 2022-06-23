@@ -19,6 +19,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*!
+ * @file sppc.h
+ * @brief SPPC interface.
+ */
+
 #ifndef SPPC_H_
 #define SPPC_H_
 
@@ -26,35 +31,60 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define SPPC_API_1 1
-#define SPPC_API SPPC_API_1
+#define SPPC_API_1 1        /*!< Interface version 1 */
+#define SPPC_API SPPC_API_1 /*!< Current interface version */
 
+/*!
+ * @enum sppc_error_e
+ * @brief SPPC error code.
+ */
 typedef enum {
-    SPPC_FAILURE = -1,
-    SPPC_SUCCESS,
+    SPPC_FAILURE = -1,      /*!< Operation failed, call sppc_get_error */
+    SPPC_SUCCESS,           /*!< Operation succeeded */
 } sppc_error_e;
 
+/*!
+ * @struct sppc_t
+ * @brief SPPC context.
+ */
 typedef struct {
-    const char *device;
-    const char *file;
-    uint32_t baud;
-    bool read;
+    const char *device;     /*!< Constant pointer to device path */
+    const char *file;       /*!< Constant pointer to file path */
+    uint32_t baud;          /*!< Read/Write baud rate */
+    bool read;              /*!< Read mode */
 } sppc_t;
 
+/*!
+ * @struct sppc_version_t
+ * @brief SPPC version.
+ */
 typedef struct {
-    uint16_t major;
-    uint16_t minor;
-    uint32_t patch;
+    uint16_t major;         /*!< Major version */
+    uint16_t minor;         /*!< Minor version */
+    uint32_t patch;         /*!< Patch version */
 } sppc_version_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+/*!
+ * @brief Run SPPC with a caller defined SPPC context.
+ * @param[in] context Constant pointer to caller defined SPPC context
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 sppc_error_e sppc(const sppc_t *context);
 
+/*!
+ * @brief Get SPPC error string.
+ * @return Constant pointer to SPPC error string
+ */
 const char *sppc_error(void);
 
+/*!
+ * @brief Get SPPC version.
+ * @return Constant pointer to SPPC version
+ */
 const sppc_version_t *sppc_version(void);
 
 #ifdef __cplusplus

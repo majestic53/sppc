@@ -19,17 +19,32 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*!
+ * @file serial.c
+ * @brief Common serial.
+ */
+
 #include <common.h>
 
+/*!
+ * @struct sppc_baud_map_t
+ * @brief Baud map context.
+ */
 typedef struct {
-    uint32_t baud;
-    speed_t speed;
+    uint32_t baud;  /*!< Baud rate */
+    speed_t speed;  /*!< Speed */
 } sppc_baud_map_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+/*!
+ * @brief Map baud rate to speed.
+ * @param[in] baud Baud rate
+ * @param[in,out] speed Pointer to speed
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 static sppc_error_e sppc_serial_baud_map(uint32_t baud, speed_t *speed)
 {
     size_t index;

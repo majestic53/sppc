@@ -19,25 +19,50 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*!
+ * @file buffer.h
+ * @brief Common buffer.
+ */
+
 #ifndef SPPC_BUFFER_H_
 #define SPPC_BUFFER_H_
 
 #include <define.h>
 
+/*!
+ * @struct sppc_buffer_t
+ * @brief Buffer context
+ */
 typedef struct {
-    uint8_t *data;
-    size_t capacity;
-    size_t length;
+    uint8_t *data;      /*!< Pointer to buffer data */
+    size_t capacity;    /*!< Buffer capacity, in bytes */
+    size_t length;      /*!< Buffer length, in bytes */
 } sppc_buffer_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+/*!
+ * @brief Allocate buffer.
+ * @param[in,out] buffer Pointer to buffer context
+ * @param[in] length Buffer length, in bytes
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 sppc_error_e sppc_buffer_allocate(sppc_buffer_t *buffer, size_t length);
 
+/*!
+ * @brief Free buffer.
+ * @param[in,out] buffer Pointer to buffer context
+ */
 void sppc_buffer_free(sppc_buffer_t *buffer);
 
+/*!
+ * @brief Reallocate buffer.
+ * @param[in,out] buffer Pointer to buffer context
+ * @param[in] length Buffer length, in bytes
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 sppc_error_e sppc_buffer_reallocate(sppc_buffer_t *buffer, size_t length);
 
 #ifdef __cplusplus

@@ -19,6 +19,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*!
+ * @file common.h
+ * @brief Common header.
+ */
+
 #ifndef SPPC_COMMON_H_
 #define SPPC_COMMON_H_
 

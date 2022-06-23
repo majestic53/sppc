@@ -19,6 +19,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*!
+ * @file buffer.c
+ * @brief Common buffer.
+ */
+
 #include <common.h>
 
 #ifdef __cplusplus
@@ -52,7 +57,7 @@ sppc_error_e sppc_buffer_reallocate(sppc_buffer_t *buffer, size_t capacity)
     sppc_error_e result = SPPC_SUCCESS;
 
     if(!(buffer->data = realloc(buffer->data, capacity))) {
-        result = SPPC_ERROR("Failed to allocate buffer -- %.02f KB (%u bytes)", capacity / 1024.f, capacity);
+        result = SPPC_ERROR("Failed to reallocate buffer -- %.02f KB (%u bytes)", capacity / 1024.f, capacity);
         goto exit;
     }
 

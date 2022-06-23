@@ -19,25 +19,57 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*!
+ * @file serial.h
+ * @brief Common serial.
+ */
+
 #ifndef SPPC_SERIAL_H_
 #define SPPC_SERIAL_H_
 
 #include <define.h>
 
+/*!
+ * @struct sppc_serial_t
+ * @brief Serial context
+ */
 typedef struct {
-    int port;
+    int port;   /*!< Serial port */
 } sppc_serial_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+/*!
+ * @brief Close serial.
+ * @param[in,out] serial Pointer to serial context
+ */
 void sppc_serial_close(sppc_serial_t *serial);
 
+/*!
+ * @brief Open serial.
+ * @param[in,out] serial Pointer to serial context
+ * @param[in] device Constant pointer to device path
+ * @param[in] baud Read/Write baud rate
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 sppc_error_e sppc_serial_open(sppc_serial_t *serial, const char *device, uint32_t baud);
 
+/*!
+ * @brief Read buffer from serial.
+ * @param[in,out] serial Pointer to serial context
+ * @param[in,out] buffer Pointer to buffer context
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 sppc_error_e sppc_serial_read(sppc_serial_t *serial, sppc_buffer_t *buffer);
 
+/*!
+ * @brief Write buffer to serial.
+ * @param[in,out] serial Pointer to serial context
+ * @param[in] buffer Constant pointer to buffer context
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 sppc_error_e sppc_serial_write(sppc_serial_t *serial, const sppc_buffer_t *buffer);
 
 #ifdef __cplusplus

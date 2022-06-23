@@ -17,6 +17,7 @@
 # AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+DOCS_DIRECTORY=docs/
 SOURCE_DIRECTORY=./src/
 
 BUILD_FLAGS=-march=native\ -mtune=native\ -std=gnu11\ -Wall\ -Werror
@@ -27,27 +28,22 @@ MAKE_FLAGS=--no-print-directory -C
 .PHONY: all
 all: release
 
-.PHONY: clean
-clean:
-	@make $(MAKE_FLAGS) $(SOURCE_DIRECTORY) clean
+.PHONY: docs
+docs:
+	@rm -rf $(DOCS_DIRECTORY)html
+	@doxygen $(DOCS_DIRECTORY)Doxyfile
 
 .PHONY: debug
 debug: clean
 	@make $(MAKE_FLAGS) $(SOURCE_DIRECTORY) build $(DEBUG_BUILD_FLAGS)
 
-.PHONY: install
-install: release
-	@make $(MAKE_FLAGS) $(SOURCE_DIRECTORY) install
-
-.PHONY: patch
-patch:
-	@make $(MAKE_FLAGS) $(SOURCE_DIRECTORY) patch
-
 .PHONY: release
 release: clean
+	@make $(MAKE_FLAGS) $(SOURCE_DIRECTORY) patch
 	@make $(MAKE_FLAGS) $(SOURCE_DIRECTORY) build $(RELEASE_BUILD_FLAGS)
 	@make $(MAKE_FLAGS) $(SOURCE_DIRECTORY) strip
 
-.PHONY: uninstall
-uninstall:
-	@make $(MAKE_FLAGS) $(SOURCE_DIRECTORY) uninstall
+.PHONY: clean
+clean:
+	@make $(MAKE_FLAGS) $(SOURCE_DIRECTORY) clean
+	@rm -rf $(DOCS_DIRECTORY)html

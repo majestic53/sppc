@@ -19,12 +19,22 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*!
+ * @file sppc.c
+ * @brief SPPC interface.
+ */
+
 #include <common.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+/*!
+ * @brief Read file from serial
+ * @param[in] context Constant pointer to SPPC context
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 static sppc_error_e sppc_read(const sppc_t *context)
 {
     sppc_error_e result;
@@ -52,6 +62,11 @@ exit:
     return result;
 }
 
+/*!
+ * @brief Write file to serial
+ * @param[in] context Constant pointer to SPPC context
+ * @return SPPC_SUCCESS on success, SPPC_FAILURE otherwise
+ */
 static sppc_error_e sppc_write(const sppc_t *context)
 {
     sppc_error_e result;

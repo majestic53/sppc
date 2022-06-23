@@ -4,3 +4,4 @@
 *.sublime-project
 *.o
 build/
+docs/html/

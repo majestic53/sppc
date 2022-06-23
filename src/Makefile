@@ -18,14 +18,12 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 BUILD_DIRECTORY=../build/
-INSTALL_DIRECTORY=/usr/local/bin/
 
 BINARY_FILE=sppc
 PATCH_FILE=../include/common/define.h
 OBJECT_FILES=$(patsubst %.c,%.o,$(shell find ./ -name '*.c'))
 
 INCLUDE_FLAGS=$(subst ../include/,-I../include/,$(shell find ../include/ -maxdepth 2 -type d))
-INSTALL_FLAGS=0755
 PATCH_FLAGS="s/SPPC_PATCH .*/SPPC_PATCH 0x$(shell git rev-parse --short HEAD)/g"
 
 .PHONY: all
@@ -39,11 +37,6 @@ clean:
 	@rm -rf $(BUILD_DIRECTORY)
 	@rm -f $(OBJECT_FILES)
 
-.PHONY: install
-install:
-	@mkdir -p $(INSTALL_DIRECTORY)
-	@install -m $(INSTALL_FLAGS) $(BUILD_DIRECTORY)$(BINARY_FILE) $(INSTALL_DIRECTORY)
-
 .PHONY: patch
 patch:
 	@sed -i $(PATCH_FLAGS) $(PATCH_FILE)
@@ -51,10 +44,6 @@ patch:
 .PHONY: strip
 strip:
 	@strip $(BUILD_DIRECTORY)$(BINARY_FILE)
-
-.PHONY: uninstall
-uninstall:
-	@rm -f $(INSTALL_DIRECTORY)$(BINARY_FILE)
 
 $(BUILD_DIRECTORY):
 	@mkdir -p $@

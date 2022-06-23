@@ -19,6 +19,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*!
+ * @file version.c
+ * @brief Common version.
+ */
+
 #include <common.h>
 
 static const sppc_version_t g_version = { .major = SPPC_MAJOR, .minor = SPPC_MINOR, .patch = SPPC_PATCH };

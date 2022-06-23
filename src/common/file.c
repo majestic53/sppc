@@ -19,6 +19,11 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*!
+ * @file file.c
+ * @brief Common file.
+ */
+
 #include <common.h>
 
 #ifdef __cplusplus

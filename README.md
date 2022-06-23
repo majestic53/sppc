@@ -10,12 +10,16 @@ __NOTE__: A USB/Serial adapter, with inverted Rx/Tx signals, is required for `SP
 
 <img src="https://github.com/majestic53/sppc/blob/master/docs/adapter.jpg" alt="Adapter" /><img src="https://github.com/majestic53/sppc/blob/master/docs/circuit.jpg" alt="Adapter circuit" />
 
-## Installation
+## Latest release
+
+The latest release can be found [here](https://github.com/majestic53/sppc/releases).
+
+## Build from source
 
 ```bash
 git clone https://github.com/majestic53/sppc
 cd sppc
-sudo make install
+sudo make
 ```
 
 ## Usage
