@@ -41,7 +41,7 @@
 #define SPPC_MAJOR 0            /*!< Major version */
 #define SPPC_MINOR 1            /*!< Minor version */
                                 /*!< Patch version */
-#define SPPC_PATCH 0xbd9a540
+#define SPPC_PATCH 0x05fd66e
 
 #define SPPC_EOF '\x1A'         /*!< End-of-file */
 

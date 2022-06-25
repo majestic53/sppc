@@ -54,13 +54,15 @@ void sppc_buffer_free(sppc_buffer_t *buffer)
 
 sppc_error_e sppc_buffer_reallocate(sppc_buffer_t *buffer, size_t capacity)
 {
+    sppc_buffer_t *buffer_new;
     sppc_error_e result = SPPC_SUCCESS;
 
-    if(!(buffer->data = realloc(buffer->data, capacity))) {
+    if(!(buffer_new = realloc(buffer->data, capacity))) {
         result = SPPC_ERROR("Failed to reallocate buffer -- %.02f KB (%u bytes)", capacity / 1024.f, capacity);
         goto exit;
     }
 
+    buffer = buffer_new;
     buffer->capacity = capacity;
 
 exit:
